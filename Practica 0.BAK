@@ -56,6 +56,9 @@ ancestro(Joven, Viejo):- madre(Joven, Viejo).
 ancestro(Joven, Viejo):- padre(Joven, Padre), ancestro(Padre, Viejo).
 ancestro(Joven, Viejo):- madre(Joven, Madre), ancestro(Madre, Viejo).
 
+%Creamos la relacion progenitor
+progenitor(Hijo, Padres):- padre(Hijo, Padres); madre(Hijo, Padres).
+
 %Creamos la relacion hijo para poder hacer la relacion descendientes
 hijo(Padre, Hijo):- padre(Hijo, Padre).
 hijo(Madre, Hijo):- madre(Hijo, Madre).
@@ -63,3 +66,12 @@ hijo(Madre, Hijo):- madre(Hijo, Madre).
 %Creamos la relacion descendientes, devuelve una lista con todos los descendientes, del mas lejano al mas cercano
 descendiente(Joven, Viejo):- hijo(Viejo, Joven).
 descendiente(Joven, Viejo):- hijo(Padre, Joven), descendiente(Padre, Viejo).
+
+descendientes(Pers, Descendientes):- descendientes_aux(Pers, [], Descendientes).
+descendientes_aux(Pers, DescendientesAux, Descendientes):-
+    descendiente(Pers, Desc),
+    \+ member(Desc, DescendientesAux), !,
+    append(DescendientesAux, [Desc], DescendientesAux2),
+    descendientes_aux(Pers, DescendientesAux2, Descendientes).
+descendientes_aux(_, Descendientes, Descendientes).
+
