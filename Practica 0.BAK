@@ -1,39 +1,7 @@
 % Autor: David Marquez Minguez
 % Fecha: 02/02/2020
 
-familia_corleone([antonio, vito, carmella, madre_vito, michael, santino, constanzia, frederico, tom, kay, apollonia, lucky, sandra, carlo, deanna, theresa]).
-
-%Creamos la asociacion padre
-%1a generacion
-padre(kay, michael). %michael es padre de kay.
-padre(apollonia, michael).
-padre(lucky, santino).
-padre(sandra, santino).
-padre(deanna, frederico).
-padre(theresa, tom).
-%2a generacion
-padre(michael, vito).
-padre(santino, vito).
-padre(constanzia, vito).
-padre(frederico, vito).
-padre(tom, vito).
-%3a generacion
-padre(vito, antonio).
-
-%Creamos la asociacion madre
-%1a generacion
-madre(carlo, constanzia).
-%2a generacion
-madre(michael, carmella).
-madre(santino, carmella).
-madre(constanzia, carmella).
-madre(frederico, carmella).
-madre(tom, carmella).
-%3a generacion
-madre(vito, madre_vito).
-
-%Creamos la asociacion mujer
-mujer(vito, carmella).
+:-consult('familia-corleone.pl').
 
 %Creamos la relacion hermano, seran hermanos si son de la misma madre y del mismpo padre
 hermano(Herm1,Herm2):- padre(Herm1,Padre),padre(Herm2,Padre), madre(Herm1,Madre),madre(Herm2,Madre),\+ (Herm1=Herm2).
@@ -69,9 +37,13 @@ descendiente(Joven, Viejo):- hijo(Padre, Joven), descendiente(Padre, Viejo).
 
 descendientes(Pers, Descendientes):- descendientes_aux(Pers, [], Descendientes).
 descendientes_aux(Pers, DescendientesAux, Descendientes):-
-    descendiente(Pers, Desc),
+    descendiente(Desc, Pers),
     \+ member(Desc, DescendientesAux), !,
     append(DescendientesAux, [Desc], DescendientesAux2),
     descendientes_aux(Pers, DescendientesAux2, Descendientes).
 descendientes_aux(_, Descendientes, Descendientes).
+
+relacion(Relacion,Persona1,Persona2):- relacion(Persona1,Persona2).
+relacion(Relacion,Persona1,Persona2):- call(Relacion(Persona1,Persona2)).
+%relacion(Relacion,Persona1,Persona2):- Llamada =.. [Relacion,Persona1,Persona2], call(Llamada).
 
