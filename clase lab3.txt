@@ -1,0 +1,24 @@
+nth1 nth0: acceder a un elem de una lsta por indice, sirv epara leer e insertar, nth1 empiza por , empieza por 1
+select: extraer elem de una lista, si el elem esta varias veces, elimina el primero 
+
+al usar listas se va a producir un patrro que sera el siguiente, puesto que en prolog o se pued emodificar 
+sobre una lista, sino sobre una sublista
+
+listas([a,a,b,b],[e,c,a,d],[c,c,a,d]).
+%Regla que reemlpaza un elem de la lista: nth - selsct - nth
+modificar_sublistas(Lista, Indice_sublista, SimboloIn, SimboloOut, ListaOut):- 
+	nth1(Inidice_sublista, Lista, Sublista, RestoLista),
+	select(SimboloIn, Sublista, SimboloOut, SublistaOut),
+	nth1(Indice_sublista, ListaOut, SublistaOut, Restolista).
+
+modificar_lista_forma2(Lista, Indice_sublista, SimboloIn, SimboloOut, ListaOut):- 
+	nth1(Inidice_sublista, Lista, Sublista, RestoLista),
+	select(SimboloIn, Sublista, SimboloOut, SublistaOut),
+	select(Indice_sublista, ListaOut, SublistaOut, Lista).
+
+repeat:repetir un codigo hasta que de un resultado bueno, tipico en los menus, para pedir un numero al usuario
+pedir_numero(Min, Max, Num):- 
+	repeat, %repite el codigo hasta que se cumplan todas las condiciones 
+	write('Introduce num enre min y max'),
+	write(Min), write(','),write(Max),
+	read(Num), Num >= Min, Num =< Max.

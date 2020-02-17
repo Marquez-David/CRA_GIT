@@ -43,6 +43,10 @@ descendientes_aux(Pers, DescendientesAux, Descendientes):-
     descendientes_aux(Pers, DescendientesAux2, Descendientes).
 descendientes_aux(_, Descendientes, Descendientes).
 
-.
+%generar_lista_pred(Relacion,Pers1,Pers2):- generar_lista_pred_aux(Relacion, Pers1, PersAux, Pers2).
+%generar_lista_pred_aux(Relacion, Pers1, PersAux, Pers2):-
+    %call(Relacion,Pers1,PersY),
+    %not(member(PersY,PersAux)),
+    %generar_lista_pred_aux(Relacion, Pers1, (PersAux|PersY), Pers2
 %relacion(Relacion,Persona1,Persona2):- Llamada =.. [Relacion,Persona1,Persona2], call(Llamada).
 
