@@ -1,0 +1,21 @@
+:-consult('./arbol_familia_corleone.pl').
+
+abuelos(X,Y):- padres(Z,Y), padres(X,Z).
+nietos(X,Y):- padres(Z,X), padres(Y,Z).
+padres(X,Y):- progenitor(X,Y).
+hijos(X,Y):- progenitor(Y,X).
+hermanos(X,Y):- padres(X,Y),X\=Y.
+
+ancestro(X,Y):- progenitor(X,Y).
+ancestro(X,Y):- progenitor(X,Z),ancestro(Z,Y).
+
+descendiente(X,Y):- progenitor(Y,X).
+descendiente(X,Y):- progenitor(Y,Z),descendiente(X,Z).
+
+descendientes(Descendientes, Pers):- descendientes_aux(Pers, [], Descendientes).
+descendientes_aux(Pers, DescendientesAux, Descendientes):-
+    descendiente(Desc, Pers), %tienen que ser descendientes
+    \+ member(Desc, DescendientesAux), !,  %que no este duplicado
+    append(DescendientesAux, [Desc], DescendientesAux2), %lo añado a la lista
+    descendientes_aux(Pers, DescendientesAux2, Descendientes).  %itero de nuevo pero con la nueva lista
+descendientes_aux(_, Descendientes, Descendientes).
