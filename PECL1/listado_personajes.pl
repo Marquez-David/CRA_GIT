@@ -25,7 +25,7 @@ personaje('Sabrina', ['femenino', 'negro', 'verde', 'feliz', 'si', 'azules', 'an
 personaje('Cindy', ['femenino', 'negro', 'roja', 'feliz', 'no', 'marrones', 'joven', 'si', 'negro']).
 personaje('Emma', ['femenino', 'rubio', 'verde', 'feliz', 'no', 'marrones', 'joven', 'si', 'negro']).
 
-listarPersonajes(Lista):- listarAux([], Lista),!.
+listarPersonajes(ListaPersonajes):- listarAux([], ListaPersonajes),!.
 listarAux(Y,Z):- personaje(Personaje,_), not(member(Personaje,Y)), listarAux([Personaje|Y],Z).
 listarAux(X,X).
 

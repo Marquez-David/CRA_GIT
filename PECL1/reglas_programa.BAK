@@ -1,0 +1,7 @@
+% Autor: Márquez Mínguez, David
+% Fecha: 01/03/2021
+
+consult:-('listado_personajes.pl').
+
+asignar_personaje(Personaje):- listarPersonajes(ListaPersonajes),
+                               random_select(Personaje,ListaPersonajes,_).
