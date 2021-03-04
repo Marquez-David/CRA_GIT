@@ -1,7 +1,7 @@
 % Autor: Márquez Mínguez, David
 % Fecha: 01/03/2021
 
-consult:-('listado_personajes.pl').
+:-['listado_personajes.pl'].
 consult:-('reglas_programa').
 
 jugar:-
@@ -21,12 +21,12 @@ comprobar_respuesta(1):- listarPersonajes(ListaPersonajes),
                          writeln(PersonajeJugador),
                          personaje(PersonajeJugador,CaracteristicasPersonajeJugador),
                          write('Recuerda que las carcaterisitcas de tu personaje son: '),
-                         writeln(Caracteristicas),
+                         writeln(CaracteristicasPersonajeJugador),
                          write('El personaje de la maquian es: '),
                          writeln(PersonajeMaquina),
                          comenzar_turnos.
 
 comprobar_respuesta(0):- write('Hasta luego :(').
 
-comenzar_turnos:- write(' ff').
+comenzar_turnos:- write('seguimos aqui...').
 
