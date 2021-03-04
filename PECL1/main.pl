@@ -1,8 +1,8 @@
 % Autor: Márquez Mínguez, David
 % Fecha: 01/03/2021
 
-consult:-('listado_personajes.pl').
-consult:-('reglas_programa').
+:-['listado_personajes.pl'].
+:-['reglas_programa.pl'].
 
 jugar:-
       writeln('~~~~~~~~ BIENVENIDO A QUIEN ES QUIEN ~~~~~~~~'), nl,
@@ -28,5 +28,5 @@ comprobar_respuesta(1):- listarPersonajes(ListaPersonajes),
 
 comprobar_respuesta(0):- write('Hasta luego :(').
 
-comenzar_turnos:- write(' ff').
+comenzar_turnos:- write('seguimos aqui...').
 
