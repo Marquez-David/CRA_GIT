@@ -2,28 +2,28 @@
 % Fecha: 01/03/2021
 
 %BASE DE DATOS CON LOS PERSONAJES
-%personaje(nombre, [genero, color pelo, color ropa, estado animico, gafas?, color ojos, edad, sombrero?, color de piel]).
+%personaje(nombre, [genero, color pelo, color ropa, estado animico, gafas?, color ojos, edad, sombrero?, barba?]).
 
-personaje('Albert', ['masculino', 'negro', 'roja', 'feliz', 'si', 'azules', 'joven', 'no', 'blanco']).
-personaje('Paul', ['masculino', 'rubio', 'roja', triste, 'no', 'marrones', 'anciano', 'no', 'negro']).
-personaje('Tom', ['masculino', 'negro', 'verde', 'feliz', 'no', 'marrones', 'joven', 'no', 'blanco']).
-personaje('Richard', ['masculino', 'negro', 'verde', 'triste', 'no', 'marrones', 'joven', 'si', 'negro']).
-personaje('Louis', ['masculino', 'negro', 'roja', 'triste', 'no', 'azules', 'joven', 'no', 'negro']).
-personaje('Michael', ['masculino', 'rubio', 'verde', 'feliz', 'si', 'marrones', 'anciano', 'no', 'blanco']).
-personaje('Charles', ['masculino', 'negro', 'verde', 'feliz', 'si', 'marrones', 'joven', 'no', 'blanco']).
-personaje('Sam', ['masculino', 'rubio', 'roja', 'triste', 'no', 'azules', 'anciano', 'si', 'negro']).
-personaje('Steve', ['masculino', 'negro', 'roja', 'feliz', 'no', 'marrones', 'anciano', 'blanco']).
-personaje('Will', ['masculino', 'rubio', 'verde', 'feliz', 'no', 'azules', 'joven', 'no', 'blanco']).
-personaje('Anthony', ['masculino', 'rubio', 'roja', 'feliz', 'si', 'marrones', 'joven', 'no', 'negro']).
-personaje('Billy', ['masculino', 'rubio', 'verde', 'triste', 'no', 'azules', 'anciano', 'no', 'blanco']).
-personaje('Henry', ['masculino', 'negro', 'roja', 'triste', 'no', 'marrones', 'joven', 'si', 'negro']).
-personaje('Tiffany', ['femenino', 'negro', 'verde', 'feliz', 'no', 'marrones', 'joven', 'no', 'negro']).
-personaje('Natalie', ['femenino', 'rubio', 'roja', 'feliz', 'si', 'azules', 'joven', 'no', 'blanco']).
-personaje('Roxanne', ['femenino', 'rubio', 'verde', 'feliz', 'no', 'azules', 'anciano', 'no', 'negro']).
-personaje('Sarah', ['femenino', 'negro', 'roja', 'triste', 'no', 'marrones', 'anciano', 'no', 'blanco']).
-personaje('Sabrina', ['femenino', 'negro', 'verde', 'feliz', 'si', 'azules', 'anciano', 'no', 'blanco']).
-personaje('Cindy', ['femenino', 'negro', 'roja', 'feliz', 'no', 'marrones', 'joven', 'si', 'negro']).
-personaje('Emma', ['femenino', 'rubio', 'verde', 'feliz', 'no', 'marrones', 'joven', 'si', 'negro']).
+personaje('Albert', ['masculino', 'pelo_negro', 'ropa_roja', 'feliz', 'con_gafas', 'ojos_azules', 'joven', 'sin_sombrero', 'con_barba']).
+personaje('Paul', ['masculino', 'pelo_rubio', 'ropa_roja', triste, 'sin_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).
+personaje('Tom', ['masculino', 'pelo_negro', 'ropa_verde', 'feliz', 'sin_gafas', 'ojos_marrones', 'joven', 'sin_sombrero', 'con_barba']).
+personaje('Richard', ['masculino', 'pelo_negro', 'ropa_verde', 'triste', 'sin_gafas', 'ojos_marrones', 'joven', 'con_sombrero', 'con_barba']).
+personaje('Louis', ['masculino', 'pelo_negro', 'ropa_roja', 'triste', 'sin_gafas', 'ojos_azules', 'joven', 'sin_sombrero', 'con_barba']).
+personaje('Michael', ['masculino', 'pelo_rubio', 'ropa_verde', 'feliz', 'con_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).
+personaje('Charles', ['masculino', 'pelo_negro', 'ropa_verde', 'feliz', 'con_gafas', 'ojos_marrones', 'joven', 'sin_sombrero', 'sin_barba']).
+personaje('Sam', ['masculino', 'pelo_rubio', 'ropa_roja', 'triste', 'sin_gafas', 'ojos_azules', 'anciano', 'con_sombrero', 'con_barba']).
+personaje('Steve', ['masculino', 'pelo_negro', 'ropa_roja', 'feliz', 'sin_gafas', 'ojos_marrones', 'anciano', 'con_sombrero', 'con_barba']).
+personaje('Will', ['masculino', 'pelo_rubio', 'ropa_verde', 'feliz', 'sin_gafas', 'ojos_azules', 'joven', 'sin_sombrero', 'sin_barba']).
+personaje('Anthony', ['masculino', 'pelo_rubio', 'ropa_roja', 'feliz', 'con_gafas', 'ojos_marrones', 'joven', 'sin_sombrero', 'sin_barba']).
+personaje('Billy', ['masculino', 'pelo_rubio', 'ropa_verde', 'triste', 'sin_gafas', 'ojos_azules', 'anciano', 'sin_sombrero', 'con_barba']).
+personaje('Henry', ['masculino', 'pelo_negro', 'ropa_roja', 'triste', 'sin_gafas', 'ojos_marrones', 'joven', 'con_sombrero', 'sin_barba']).
+personaje('Tiffany', ['femenino', 'pelo_negro', 'ropa_verde', 'feliz', 'sin_gafas', 'ojos_marrones', 'joven', 'sin_sombrero', 'sin_barba']).
+personaje('Natalie', ['femenino', 'pelo_rubio', 'ropa_roja', 'feliz', 'con_gafas', 'ojos_azules', 'joven', 'sin_sombrero', 'sin_barba']).
+personaje('Roxanne', ['femenino', 'pelo_rubio', 'ropa_verde', 'feliz', 'sin_gafas', 'ojos_azules', 'anciano', 'sin_sombrero', 'sin_barba']).
+personaje('Sarah', ['femenino', 'pelo_negro', 'ropa_roja', 'triste', 'sin_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).
+personaje('Sabrina', ['femenino', 'pelo_negro', 'ropa_verde', 'feliz', 'con_gafas', 'ojos_azules', 'anciano', 'sin_sombrero', 'sin_barba']).
+personaje('Cindy', ['femenino', 'pelo_negro', 'ropa_roja', 'feliz', 'sin_gafas', 'ojos_marrones', 'joven', 'con_sombrero', 'sin_barba']).
+personaje('Emma', ['femenino', 'pelo_rubio', 'ropa_verde', 'feliz', 'sin_gafas', 'ojos_marrones', 'joven', 'con_sombrero', 'sin_barba']).
 
 listarPersonajes(ListaPersonajes):- listarAux([], ListaPersonajes),!.
 listarAux(Y,Z):- personaje(Personaje,_), not(member(Personaje,Y)), listarAux([Personaje|Y],Z).
