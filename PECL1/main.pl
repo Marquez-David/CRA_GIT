@@ -31,39 +31,40 @@ comprobar_respuesta(1):- listarPersonajes(ListaPersonajes),
                          writeln(CaracteristicasPersonajeJugador),
                          write('El personaje de la maquina es: '),
                          writeln(PersonajeMaquina),
-                         comenzar_turnos(PersonajeJugador,PersonajeMaquina).
+                         listarPreguntas(ListaPreguntasJugador), listarPreguntas(ListaPreguntasMaquina),
+                         listarPersonajes(ListaPersonajesJugador), listarPersonajes(ListaPersonajesMaquina),
+                         turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina).
 
 comprobar_respuesta(0):- write('Hasta luego :(').
 
-comenzar_turnos(PersonajeJugador,PersonajeMaquina):- turno_jugador(PersonajeJugador,PersonajeMaquina).
+turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina):-
+              writeln(' '),nl,
+              writeln('Es tu turno.'),
+              writeln('Elige de entre las siguientes preguntas una que quieras hacerme y escríbela con un punto al final: '),
+              writeln(ListaPreguntasJugador),
+              read(X), %El jugador hace la pregunta
+              member(X,ListaPreguntasJugador) ->
+              del(X,ListaPreguntasJugador,ListaPreguntasJugadorOut),
+              procesar_pregunta(X,ListaPersonajesMaquina,PersonajeMaquina,ListaFinalOut), %La pregunta se procesa y la maquina contesta
+              length(ListaFinalOut,Length),
+              write('Me quedan '), write(Length), write(' fichas aun.'),
+              turno_maquina(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugadorOut,ListaPreguntasMaquina);
+              
+              writeln('Debes seleccionar una pregunta valida!'),
+              turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina).
 
-turno_jugador(PersonajeJugador,PersonajeMaquina):- listarPersonajes(ListaPersonajes),
-                                                   writeln('Es tu turno.'),
-                                                   writeln('Elige de entre las siguientes preguntas una que quieras hacerme y escríbela cambiando la interrogación por un punto: es_chico?, es_chica?, gafas?, pelo_rubio?, pelo_negro?, feliz?, triste?, ropa_roja?, ropa_verde?') ,
-                                                   writeln('ojos_azules?, ojos_marrones?, es_joven?, es_anciano?, con_sombrero?, sin_sombrero?, barba?'),
-                                                   read(X), %El jugador hace la pregunta
-                                                   procesar_pregunta(X,ListaPersonajes, PersonajeMaquina). %La pregunta se procesa y la maquina contesta
+turno_maquina(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina):-
+              writeln(' '),nl,
+              write('Ahora te hago yo una pregunta: '),
+              seleccionar_pregunta_aleatoria(X,ListaPreguntasMaquina,ListaPreguntasMaquinaOut),
+              writeln(' '),
+              procesar_pregunta(X,ListaPersonajesJugador,PersonajeJugador,ListaFinalOut),
+              length(ListaFinalOut,Length),
+              write('Aun dudo entre '), write(Length), write(' posibilidades.'),
+              turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquinaOut).
 
                 
-procesar_pregunta(X,ListaPersonajes,Personaje):-
-                                                X==es_chico -> es_chico(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==es_chica -> es_chica(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==pelo_negro -> pelo_negro(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==pelo_rubio -> pelo_rubio(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==ropa_roja -> ropa_roja(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==feliz -> feliz(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==triste -> triste(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==gafas -> gafas(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==ojos_azules -> ojos_azules(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==ojos_marrones -> ojos_marrones(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==es_joven -> joven(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==es_anciano -> anciano(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==con_sombrero -> con_sombrero(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==sin_sombrero -> sin_sombrero(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                X==barba -> barba(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                  
-                                                writeln('Error al escribir la pregunta.'),
-                                                fail.
+
 
 
 

@@ -40,4 +40,6 @@ sin_sombrero(Lista,ListaFinalOut,L1,L2,Personaje):- procesar_opcion_sin_sombrero
 %%%  Preguntas sobre la barba %%%
 barba(Lista,ListaFinalOut,L1,L2,Personaje):- procesar_opcion_barba(Personaje,Lista,[],ListaFinalOut,L1,L2).
 
+listarPreguntas(ListaPreguntas):- ListaPreguntas = ['es_chico','es_chica','ropa_verde','ropa_roja','feliz','triste','gafas','ojos_azules','ojos_marrones','joven','anciano','con_sombrero','sin_sombrero','barba'].
+
                                       
