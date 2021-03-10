@@ -30,8 +30,8 @@ procesar_pregunta(X,ListaPersonajes,Personaje,ListaFinalOut):-
                                                                             X==gafas -> gafas(ListaPersonajes,ListaFinalOut,[],_,Personaje);
                                                                             X==ojos_azules -> ojos_azules(ListaPersonajes,ListaFinalOut,[],_,Personaje);
                                                                             X==ojos_marrones -> ojos_marrones(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                                            X==es_joven -> joven(ListaPersonajes,ListaFinalOut,[],_,Personaje);
-                                                                            X==es_anciano -> anciano(ListaPersonajes,ListaFinalOut,[],_,Personaje);
+                                                                            X==joven -> joven(ListaPersonajes,ListaFinalOut,[],_,Personaje);
+                                                                            X==anciano -> anciano(ListaPersonajes,ListaFinalOut,[],_,Personaje);
                                                                             X==con_sombrero -> con_sombrero(ListaPersonajes,ListaFinalOut,[],_,Personaje);
                                                                             X==sin_sombrero -> sin_sombrero(ListaPersonajes,ListaFinalOut,[],_,Personaje);
                                                                             X==barba -> barba(ListaPersonajes,ListaFinalOut,[],_,Personaje);
@@ -39,6 +39,18 @@ procesar_pregunta(X,ListaPersonajes,Personaje,ListaFinalOut):-
 
                                                               writeln('Error al escribir la pregunta.'),
                                                               fail.
+                                                              
+pregunta_disponible(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina,Pregunta,ListaPreguntasJugadorOut):-  member(Pregunta,ListaPreguntasJugador) -> del(Pregunta,ListaPreguntasJugador,ListaPreguntasJugadorOut);
+
+                                                                                                                                                                                      writeln('Debes seleccionar una pregunta valida!'),
+                                                                                                                                                                                      turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina).
+
+pregunta_disponible(PersonajeJugador1,PersonajeJugador2,ListaPersonajesJugador1,ListaPersonajesJugador2,ListaPreguntasJugador1,ListaPreguntasJugador2,Turno,Pregunta,ListaPreguntasJugadorOut):-  Turno==jugador1, member(Pregunta,ListaPreguntasJugador1) -> del(Pregunta,ListaPreguntasJugador1,ListaPreguntasJugadorOut);
+
+                                                                                                                                                                                                  Turno==jugador2, member(Pregunta,ListaPreguntasJugador2) -> del(Pregunta,ListaPreguntasJugador2,ListaPreguntasJugadorOut);
+
+                                                                                                                                                                                                  writeln('Debes seleccionar una pregunta valida!'),
+                                                                                                                                                                                                  jugador_vs_jugador(PersonajeJugador1,PersonajeJugador2,ListaPersonajesJugador1,ListaPersonajesJugador2,ListaPreguntasJugador1,ListaPreguntasJugador2,Turno).
                                                        
 procesar_respuesta(ListaFinalOut,Respuesta):- Respuesta==1 -> writeln('La respuesta a la pregunta es afirmativa'),
                                               writeln('Puede ser uno de los personajes de esta lista: '),
@@ -51,6 +63,9 @@ procesar_respuesta(ListaFinalOut,Respuesta):- Respuesta==1 -> writeln('La respue
 seleccionar_pregunta_aleatoria(X,ListaPreguntas,ListaPreguntasOut):- random_member(X,ListaPreguntas),
                                                                      write(X),
                                                                      del(X,ListaPreguntas,ListaPreguntasOut).
+
+intentar_adivinar_personaje(ListaPersonajes):- length(ListaPersonajes,Length), Length==1 -> write('El personajes es '), write(ListaPersonajes), break;
+                                               fail.
 
 procesar_opcion_es_chico(Personaje,Lista,ListaFinal,ListaFinalOut,L1,L2):- personaje(Personaje,Z), member('masculino',Z) -> filtrar_lista(Lista,'masculino',ListaFinal,ListaFinalOut),
                                                                            append(L1,['masculino'],L2),
