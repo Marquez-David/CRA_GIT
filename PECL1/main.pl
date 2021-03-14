@@ -56,13 +56,29 @@ comprobar_respuesta(2):- listarPersonajes(ListaPersonajes),
 comprobar_respuesta(3):- write('Hasta luego :(').
 
 jugador_vs_maquina(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina,Turno):-
+                   length(ListaPersonajesJugador,Tam), Tam==1 -> nl, write('He ganado, se que eres '), write(ListaPersonajesJugador);
+                   length(ListaPersonajesMaquina,Tam), Tam==1  -> nl, write('Tu ganas, ya sabias que era '), write(ListaPersonajesMaquina);
+
                    Turno==jugador -> turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina);
                    
                    Turno==maquina -> turno_maquina(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina);
                    
                    writeln('Error en los turnos').
                    
+jugador_vs_maquina_avanzado(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina,Turno):-
+                            length(ListaPersonajesJugador,Tam), Tam==1 -> nl, write('He ganado, se que eres '), write(ListaPersonajesJugador);
+                            length(ListaPersonajesMaquina,Tam), Tam==1  -> nl, write('Tu ganas, ya sabias que era '), write(ListaPersonajesMaquina);
+                            
+                            Turno==jugador -> turno_jugador(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina);
+
+                            Turno==maquina -> turno_maquina(PersonajeJugador,PersonajeMaquina,ListaPersonajesJugador,ListaPersonajesMaquina,ListaPreguntasJugador,ListaPreguntasMaquina);
+
+                            writeln('Error en los turnos').
+                   
 jugador_vs_jugador(PersonajeJugador1,PersonajeJugador2,ListaPersonajesJugador1,ListaPersonajesJugador2,ListaPreguntasJugador1,ListaPreguntasJugador2,Turno):-
+                   length(ListaPersonajesJugador1,Tam),Tam==1 -> nl, writeln('Gana el jugador2!!');
+                   length(ListaPersonajesJugador2, Tam),Tam==1  -> nl, writeln('Gana el jugador1!!');
+
                    Turno==jugador1 -> writeln(' '),nl,
                                       write('Turno de '), write(Turno), nl,
                                       writeln('Elige de entre las siguientes preguntas una que quieras hacerme y escríbela con un punto al final: '),

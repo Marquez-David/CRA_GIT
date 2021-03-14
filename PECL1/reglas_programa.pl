@@ -10,6 +10,8 @@ asignar_personaje(Personaje):- listarPersonajes(ListaPersonajes),
 del(X,[X|Tail],Tail).
 del(X,[Head|Tail],[Head|NewTail]):- del(X,Tail,NewTail).
 
+p([H|T], H, T).
+
 filtrar_lista([],_,ListaFinal,ListaFinal).
 filtrar_lista(Lista,Filtro,ListaFinal,ListaFinalOut):- personaje(X,Z), member(Filtro,Z), member(X, Lista), not(member(X, ListaFinal)),
                                                        append(ListaFinal, [X] , NuevaListaFinal),
@@ -60,12 +62,10 @@ procesar_respuesta(ListaFinalOut,Respuesta):- Respuesta==1 -> writeln('La respue
                                               writeln('Puede ser uno de los personajes de esta lista: '),
                                               writeln(ListaFinalOut).
                                               
+                                              
 seleccionar_pregunta_aleatoria(X,ListaPreguntas,ListaPreguntasOut):- random_member(X,ListaPreguntas),
                                                                      write(X),
                                                                      del(X,ListaPreguntas,ListaPreguntasOut).
-
-intentar_adivinar_personaje(ListaPersonajes):- length(ListaPersonajes,Length), Length==1 -> write('El personajes es '), write(ListaPersonajes), break;
-                                               fail.
 
 procesar_opcion_es_chico(Personaje,Lista,ListaFinal,ListaFinalOut,L1,L2):- personaje(Personaje,Z), member('masculino',Z) -> filtrar_lista(Lista,'masculino',ListaFinal,ListaFinalOut),
                                                                            append(L1,['masculino'],L2),
