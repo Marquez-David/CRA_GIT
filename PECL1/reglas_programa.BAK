@@ -10,6 +10,8 @@ asignar_personaje(Personaje):- listarPersonajes(ListaPersonajes),
 del(X,[X|Tail],Tail).
 del(X,[Head|Tail],[Head|NewTail]):- del(X,Tail,NewTail).
 
+p([H|T], H, T).
+
 filtrar_lista([],_,ListaFinal,ListaFinal).
 filtrar_lista(Lista,Filtro,ListaFinal,ListaFinalOut):- personaje(X,Z), member(Filtro,Z), member(X, Lista), not(member(X, ListaFinal)),
                                                        append(ListaFinal, [X] , NuevaListaFinal),
@@ -17,6 +19,17 @@ filtrar_lista(Lista,Filtro,ListaFinal,ListaFinalOut):- personaje(X,Z), member(Fi
                                                        filtrar_lista(NuevaLista,Filtro,NuevaListaFinal, ListaFinalOut);
                                                        subtract(Lista,[_],NuevaLista),
                                                        filtrar_lista(NuevaLista,Filtro,ListaFinal, ListaFinalOut).
+                                                       
+caracteristicas_comunes(ListaPersonajes,ListaFinalOut):- filtrar_lista(ListaPersonajes,'masculino',[],ListaFinalOutMasculino),
+                                                         length(ListaFinalOutMasculino,TamMaculino),
+                                                         carcateristica('masculino',ListaFinalOutMasculino),
+                                                         
+                                                         filtrar_lista(ListaPersonajes,'femenino',[],ListaFinalOutFemenino),
+                                                         length(ListaFinalOutFemenino,TamFemenino),
+                                                         
+                                                         write(TamMaculino).
+                                                         
+ordenar_en_lista(Caracteristica,Lista,Puntuacion,ListaFinalOut,PuntuacionAnterior):-
                                                        
 procesar_pregunta(X,ListaPersonajes,Personaje,ListaFinalOut):-
                                                                             X==es_chico -> es_chico(ListaPersonajes,ListaFinalOut,[],_,Personaje);

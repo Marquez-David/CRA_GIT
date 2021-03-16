@@ -20,6 +20,7 @@ filtrar_lista(Lista,Filtro,ListaFinal,ListaFinalOut):- personaje(X,Z), member(Fi
                                                        subtract(Lista,[_],NuevaLista),
                                                        filtrar_lista(NuevaLista,Filtro,ListaFinal, ListaFinalOut).
                                                        
+                                                       
 procesar_pregunta(X,ListaPersonajes,Personaje,ListaFinalOut):-
                                                                             X==es_chico -> es_chico(ListaPersonajes,ListaFinalOut,[],_,Personaje);
                                                                             X==es_chica -> es_chica(ListaPersonajes,ListaFinalOut,[],_,Personaje);

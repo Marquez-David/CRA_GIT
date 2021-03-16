@@ -3,6 +3,7 @@
 
 :-['listado_personajes.pl'].
 :-['reglas_programa.pl'].
+-['reglas_programa_avanzado.pl'].
 :-['preguntas_programa.pl'].
 ?- set_prolog_flag(character_escapes,false).
 
@@ -16,8 +17,11 @@ jugar:- write('________        .__                                ________      
         write('Escribe 1. para seleccionar el modo jugador vs maquina'), nl,
         write('Escribe 2. para seleccionar el modo jugador vs jugador'), nl,
         write('Escribe 3. para salir'), nl,
-        read(X),
-        comprobar_respuesta(X).
+        listarPersonajes(ListaPersonajes),
+        caracteristicas_comunes(ListaPersonajes,[],ListaFinalOut),
+        write(ListaFinalOut).
+        %read(X),
+        %comprobar_respuesta(X).
       
 comprobar_respuesta(1):- listarPersonajes(ListaPersonajes),
                          write('La lista de personajes es: '),
