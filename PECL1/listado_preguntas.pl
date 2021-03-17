@@ -1,8 +1,8 @@
-% Autor: Márquez Mínguez, David
-% Fecha: 01/03/2021
+% Autores: David Márquez Mínguez, Robert Petrisor
+% Fecha: 23/03/2021
 
 :-['listado_personajes.pl'].
-:-['reglas_programa.pl'].
+:-['juego_normal.pl'].
 
 %%% Preguntas sobre el genero %%%
 es_chico(Lista,ListaFinalOut,L1,L2,Personaje):- procesar_opcion_es_chico(Personaje,Lista,[],ListaFinalOut,L1,L2).
@@ -40,6 +40,7 @@ sin_sombrero(Lista,ListaFinalOut,L1,L2,Personaje):- procesar_opcion_sin_sombrero
 %%%  Preguntas sobre la barba %%%
 barba(Lista,ListaFinalOut,L1,L2,Personaje):- procesar_opcion_barba(Personaje,Lista,[],ListaFinalOut,L1,L2).
 
-listarPreguntas(ListaPreguntas):- ListaPreguntas = ['es_chico','es_chica','ropa_verde','ropa_roja','feliz','triste','gafas','ojos_azules','ojos_marrones','joven','anciano','con_sombrero','sin_sombrero','barba'].
+%Se crea una lista con el listado de posible spreguntas a realizar
+listarPreguntas(ListaPreguntas):- ListaPreguntas = ['es_chico','es_chica','pelo_negro','pelo_rubio','ropa_verde','ropa_roja','feliz','triste','gafas','ojos_azules','ojos_marrones','joven','anciano','con_sombrero','sin_sombrero','barba'].
 
                                       

@@ -1,5 +1,5 @@
-% Autor: Márquez Mínguez, David
-% Fecha: 01/03/2021
+% Autores: David Márquez Mínguez, Robert Petrisor
+% Fecha: 23/03/2021
 
 %BASE DE DATOS CON LOS PERSONAJES
 %personaje(nombre, [genero, color pelo, color ropa, estado animico, gafas?, color ojos, edad, sombrero?, barba?]).
@@ -37,8 +37,9 @@ personaje('Cloe', ['femenino', 'pelo_negro', 'ropa_verde', 'triste', 'sin_gafas'
 personaje('Sophia', ['femenino', 'pelo_rubio', 'ropa_roja', 'triste', 'con_gafas', 'ojos_azules', 'joven', 'con_sombrero', 'sin_barba']).
 personaje('Emily', ['femenino', 'pelo_rubio', 'ropa_roja', 'triste', 'con_gafas', 'ojos_azules', 'joven', 'con_sombrero', 'sin_barba']).
 personaje('Rose', ['femenino', 'pelo_negro', 'ropa_verde', 'triste', 'con_gafas', 'ojos_marrones', 'joven', 'con_sombrero', 'sin_barba']).
-personaje('Lia', ['femenino', 'pelo_negro', 'ropa_verde', 'triste', 'con_gafas', 'ojos_marrones', 'anciana', 'sin_sombrero', 'sin_barba']).
+personaje('Lia', ['femenino', 'pelo_negro', 'ropa_verde', 'triste', 'con_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).
 
+%Crea una lista con el nombre de los todos los personajes
 listarPersonajes(ListaPersonajes):- listarAux([], ListaPersonajes),!.
 listarAux(Y,Z):- personaje(Personaje,_), not(member(Personaje,Y)), listarAux([Personaje|Y],Z).
 listarAux(X,X).
