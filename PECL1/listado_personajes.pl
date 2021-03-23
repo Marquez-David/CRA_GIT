@@ -6,8 +6,9 @@
 
 %Listado de personajes basicos
 personaje('Albert', ['masculino', 'pelo_negro', 'ropa_roja', 'feliz', 'con_gafas', 'ojos_azules', 'joven', 'sin_sombrero', 'con_barba']).
-personaje('Paul', ['masculino', 'pelo_rubio', 'ropa_roja', triste, 'sin_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).
+personaje('Paul', ['masculino', 'pelo_rubio', 'ropa_roja', 'triste', 'sin_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).
 personaje('Tom', ['masculino', 'pelo_negro', 'ropa_verde', 'feliz', 'sin_gafas', 'ojos_marrones', 'joven', 'sin_sombrero', 'con_barba']).
+personaje('Derek', ['masculino', 'pelo_negro', 'ropa_roja', 'feliz', 'con_gafas', 'ojos_marrones', 'joven', 'sin_sombrero', 'con_barba']).
 personaje('Richard', ['masculino', 'pelo_negro', 'ropa_verde', 'triste', 'sin_gafas', 'ojos_marrones', 'joven', 'con_sombrero', 'con_barba']).
 personaje('Louis', ['masculino', 'pelo_negro', 'ropa_roja', 'triste', 'sin_gafas', 'ojos_azules', 'joven', 'sin_sombrero', 'con_barba']).
 personaje('Michael', ['masculino', 'pelo_rubio', 'ropa_verde', 'feliz', 'con_gafas', 'ojos_marrones', 'anciano', 'sin_sombrero', 'sin_barba']).

@@ -1,5 +1,5 @@
-% Autor: Márquez Mínguez, David
-% Fecha: 01/03/2021
+% Autores: David Márquez Mínguez, Robert Petrisor
+% Fecha: 23/03/2021
 
 %BASE DE DATOS CON LOS PERSONAJES
 %personaje(nombre, [genero, color pelo, color ropa, estado animico, gafas?, color ojos, edad, sombrero?, barba?]).
