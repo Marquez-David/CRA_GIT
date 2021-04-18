@@ -4,32 +4,40 @@
 %Diccionario de datos
 
 %Determinantes
-determinante(det(X),Genero,Numero) --> [X],{det(X, Genero, Numero)}.
-det(el, masculino, singular).
-det(la, femenino, singular).
-det(los, masculino, plural).
-det(las, femenino, plural).
-det(un, masculino, singlular).
-det(una, femenino, singular).
-det(unos, masc ulino, plural).
-det(unas, femenino, plural).
+determinante(det(X)) --> [X],{det(X)}.
+det(el).
+det(la).
+det(los).
+det(las).
+det(un).
+det(una).
+det(unos).
+det(unas).
 
-%Nombres
-nombre(nom(X)) --> [X],{nom(X)}.
-nom(hombre).
-nom(mujer).
-nom(juan).
-nom(maría).
-nom(manzana).
-nom(gato).
-nom(ratón).
-nom(alumno).
-nom(universidad).
+%Nombre: puede ser o nombre comun o nombre propio
+nombre(nc(X)) --> nombre_comun(nc(X)).
+nombre(np(X)) --> nombre_propio(np(X)).
+
+%Nombres comunes
+nombre_comun(nc(X)) --> [X],{nc(X)}.
+nc(hombre).
+nc(mujer).
+nc(manzana).
+nc(gato).
+nc(ratón).
+nc(alumno).
+nc(universidad).
+nc(tenedor).
+
+%Nombres propios
+nombre_propio(np(X)) --> [X],{np(X)}.
+np('Juan').
+np('María').
 
 %Verbos
 verbo(verb(X)) --> [X],{verb(X)}.
 verb(ama).
-verb(come).
+verb(comen).
 verb(estudia).
 
 %Adjetivos
