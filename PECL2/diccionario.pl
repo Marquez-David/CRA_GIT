@@ -1,7 +1,5 @@
-%Author: David Márquez Mínguez, Robert Petrisor
-%Date: 29/04/2021
-
-%Diccionario de datos
+% Autores: David Márquez Mínguez y Robert Petrisor
+% Fecha: 27/04/2021
 
 %Verbos(persona y numero)
 verbo(vrb(X), Num, Per) --> [X],{v(X,Num, Per)}.
@@ -11,22 +9,26 @@ v(comen,plural,3).
 v(hace,sing,3).
 v(habla,sing,3).
 v(canta,sing,3).
-v(alzo,sing,3).
+v(alzó,sing,3).
 v(beben,plural,3).
 v(vimos,plural,1).
 v(sirve,sing,3).
 v(es,sing,3).
 v(era,sing,3).
 v(son,plural,3).
-v(esta,sing,3).
+v(está,sing,3).
 v(depende,sing,3).
 v(salta,sing,3).
-v(sonrie,sing,3).
-v(compró,sing,1).
+v(sonríe,sing,3).
+v(compré,sing,1).
 v(toma,sing,3).
 v(estudia,sing,3).
 v(recoge,sing,3).
 v(cazó,sing,3).
+v(lee,sing,3).
+v(prefiere,sing,3).
+v(bebe,sing,3).
+v(escala,sing,3).
 
 %Verbo sustantivado: para las oraciones subordinadas adverbiales
 %Ejemplo: para escribir documentos
@@ -45,7 +47,7 @@ n(mujer,fem,sing,3).
 n(gato,masc,sing,3).
 n(tenedor,masc,sing,3).
 n(cuchillo,masc,sing,3).
-n(practica,fem,sing,3).
+n(práctica,fem,sing,3).
 n(profesor,masc,sing,3).
 n(profesores,masc,plural,3).
 n(canario,masc,sing,3).
@@ -56,7 +58,7 @@ n(paloma,fem,sing,3).
 n(patatas,fem,plural,3).
 n(cerveza,fem,sing,3).
 n(reflejos,masc,plural,3).
-n(pantalon,masc,sing,3).
+n(pantalón,masc,sing,3).
 n(vida,fem,sing,3).
 n(corbata,fem,sing,3).
 n(lugar,masc,sing,3).
@@ -65,23 +67,31 @@ n(manzana,fem,sing,3).
 n(manzanas,fem,plural,3).
 n(niño,masc,sing,3).
 n(procesador,masc,sing,3).
-n(cafe,masc,sing,3).
+n(café,masc,sing,3).
 n(textos,masc,plural,3).
 n(nacimiento,masc,sing,3).
 n(herramienta,fem,sing,3).
 n(documentos,masc,plural,3).
-n(raton,masc,sing,3).
+n(ratón,masc,sing,3).
 n(ratones,masc,plural,3).
 n(alumno,masc,sing,3).
-
+n(periódico,masc,sing,3).
+n(paella,fem,sing,3).
+n(novela,fem,sing,3).
+n(zumo,masc,sing,3).
+n(rocódromo,masc,sing,3).
+n(tardes,fem,plural,3).
+n(vecino,masc,sing,3).
+n(filosofía,fem,sing,3).
+n(derecho,masc,sing,3).
 
 %nombre propio(Genero,Persona)
-%Los nombres propios, por si solos, pertenecen a la 3? persona del sing.
+%Los nombres propios, por si solos, pertenecen a la 3º persona del sing.
 nombrePropio(np(X), Gen,Per) --> [X], {np(X,Gen,Per)}.
-np('Hector',masc,3).
+np('Héctor',masc,3).
 np('Irene',fem,3).
 np('Juan',masc,3).
-np('Maria',fem,3).
+np('María',fem,3).
 np('Madrid',masc,3).
 
 %determinante(Genero,Numero)
@@ -101,9 +111,9 @@ d(su, masc, sing).
 %pronombre(Genero,Numero,Persona)
 pronombre(pr(X), Gen, Num,Per) --> [X], {pr(X,Gen,Num,Per)}.
 pr(ella, fem, sing,3).
-pr(el,masc,sing,3).
+pr(él,masc,sing,3).
 pr(yo, masc, sing,1).
-pr(tu,masc,sing,2).
+pr(tú,masc,sing,2).
 pr(ellos, masc, plural,3).
 pr(ello, masc, sing,3).
 pr(ellas, fem, plural,3).
@@ -137,6 +147,7 @@ a(negro,masc,sing).
 a(negra,fem,sing).
 a(alta,fem,sing).
 a(gris,_,sing).
+a(ágil,_,sing).
 
 %adverbio
 adverbio(adv(X)) --> [X], {adv(X)}.
@@ -146,6 +157,7 @@ adv(cerca).
 adv(claramente).
 adv(mientras).
 adv(solamente).
+adv(ayer).
 
 %preposicion para complementos del Adjetivo
 preposicionAdj(pAdj(X)) --> [X], {pAdj(X)}.
@@ -162,6 +174,7 @@ p(desde).
 p(en).
 p(hasta).
 p(para).
+p(por).
 
 conjuncion(c(X)) --> [X], {c(X)}.
 c(y).

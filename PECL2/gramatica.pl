@@ -1,18 +1,23 @@
-%Author: David Márquez Mínguez, Robert Petrisor
-%Date: 29/04/2021
+% Autores: David Márquez Mínguez y Robert Petrisor
+% Fecha: 27/04/2021
 
 :-consult('diccionario.pl').
 
-%Se comprueba si en la oracion hay alguna palabra no incluida en el diccionario
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     FUNCIONES AUXILIARES    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Antes de empezar con el analisis de la oracion se hace un preprocesamiento
 preprocesamiento(L):- comprobar_oracion(L,L).
 
-%Compruebo si el diccionario contiene todas las palabras de la oracion
+%RSe comprueba si todas las palabras de la oracion estan dentro del vocabulario
 comprobar_oracion([H|L],Lista):- d(H,_,_) -> comprobar_oracion(L,Lista);
-                                 n(H,_,_,_) ->  comprobar_oracion(L,Lista);
+                                 n(H,_,_,_) -> comprobar_oracion(L,Lista);
                                  np(H,_,_) -> comprobar_oracion(L,Lista);
                                  pr(H,_,_,_) -> comprobar_oracion(L,Lista);
                                  a(H,_,_) -> comprobar_oracion(L,Lista);
-                                 v(H,_,_) -> comprobar_oracion(L,Lista);
                                  v(H,_,_) -> comprobar_oracion(L,Lista);
                                  vs(H) -> comprobar_oracion(L,Lista);
                                  adv(H) -> comprobar_oracion(L,Lista);
@@ -20,14 +25,12 @@ comprobar_oracion([H|L],Lista):- d(H,_,_) -> comprobar_oracion(L,Lista);
                                  pAdj(H) -> comprobar_oracion(L,Lista);
                                  c(H) -> comprobar_oracion(L,Lista);
                                  cuant(H) -> comprobar_oracion(L,Lista).
-                                 
-%Si L no esta vacia, quiere decir que alguna de las palabras no ha sido reconocida correctamente
-comprobar_oracion(L,_):- nth0(0,L,_),writeln('Error: alguna palabra no ha sido reconocida correctamente').
 
-%En caso contrario la oracion es valida y se continua con la ejecucion normal.
-comprobar_oracion([],Lista):- pre_proc_aux(Lista,Lista,0), writeln('La oracion es valida').
+%Hay alguna palabra que no ha sido reconocida
+comprobar_oracion(L,_):- nth0(0,L,_), writeln('Error al analizar la oracion!').
 
-%-----------------------------------------------------------------------------------------------------------
+%Si todas las palabras se han reconocido, seguimos con la ejecucion
+comprobar_oracion([],Lista):- pre_proc_aux(Lista,Lista,0).
 
 %Conjunto de reglas para comprobar si una oracion tiene o no varios verbos
 %En caso afirmativo, el valor K sera mayor que 1.
@@ -48,8 +51,8 @@ pre_proc_aux([H|_],Laux,_):-
 %compuesta.
 pre_proc_aux([H|L],Laux,C):-
               varios_verbos([H|L],C),
-              oracion_comp(X,Laux,[]),draw(X).
-
+              oracion_compuesta(X,Laux,[]),draw(X).
+              
 %El hecho de separar el procesamiento de oraciones que contienen un que
 %sobre aquellas oraciones que contienen mas de un verbo que, de hecho, oraciones
 %que contienen un que son oraciones relativas (+1 verbo) es para agilizar el
@@ -63,135 +66,120 @@ pre_proc_aux([_|L],Laux,C):- pre_proc_aux(L,Laux,C).
 
 %Si la lista esta vacia, significa que no hay ni un que, y ningun verbo adicional
 %por lo que la oracion decimos que es simple, llamando al predicado oracion.
-pre_proc_aux([],Laux,_):- oracion(X,Laux,[]),draw(X).
+pre_proc_aux([],Laux,_):- oracion_simple(X,Laux,[]),draw(X).
 
 %Para comprobar si una determinada palabra es un verbo, es_verbal permite
 %averiguar si una determinada palabra es o no un verbo, llamando a g_verbal
 es_verbal(o(GV)) --> g_verbal(GV,_,_,_).
 
-%TIPOS DE ORACIONES
-%Oracion simple
-%Compuesta por: Grupo_nominal + Grupo Verbal...
-oracion(o(GN,GV)) --> g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per).
-%... O por un unico Grupo Verbal (sujeto omitido)
-oracion(o(GV)) --> g_verbal(GV,_,_,_).
 
-%Oracion compuesta
-%?Que tipos de oraciones compuestas hay?
-%1. Una conjuncion de varias oraciones: oracion coordinada
-%Este predicado se emplea para crear oraciones coordinadas que contienen,
-%a su vez, otros tipos de oraciones (coordinadas,subordinadas)
-oracion_comp(ocm(Conj,O)) --> conjuncion(Conj),oracion_comp(O).
-oracion_comp(ocm(O1,Conj,O2)) --> oracion_coord(O1,_,_),conjuncion(Conj),oracion_coord(O2,_,_).
-%2. Oraciones subordinadas.
-oracion_comp(ocm(GN,GV)) --> g_nominal(GN,_,Num,Per),g_verbal_sub(GV,Num,Per).
-%3. Oraciones relativas.
-oracion_comp(ocm(GN,GV)) --> g_nominal_rel(GN,G,Num,Per),g_verbal(GV,G,Num,Per).
-oracion_comp(ocm(GN,GV)) --> g_nominal_rel(GN,_,Num,Per),g_verbal_sub(GV,Num,Per).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      TIPOS DE ORACIONES    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%SI LA ORACION ES RELATIVA/SUBORDINADA
-%Un grupo nominal relativo puede ser del tipo:
-%SUJETO (det + nom + adj) + oracion rel
-g_nominal_rel(gnom(D,N,GAdj,ORel),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per),g_adjetival(GAdj,G,Num),oracion_relativa(ORel,G,Num),concGen(G,G1),concNum(Num,Num1).
-%SUJETO (det + nom + prep) + oracion rel
-g_nominal_rel(gnom(D,N,GP,ORel),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per),g_preposicional(GP),oracion_relativa(ORel,G,Num),concGen(G,G1),concNum(Num,Num1).
-%SUJETO (det + nom) + oracion rel
-g_nominal_rel(gnom(D,N,ORel),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per),concGen(G1,G),concNum(Num1,Num),oracion_relativa(ORel,G,Num).
-%SUJETO nom + oracion rel
-g_nominal_rel(gnom(N,ORel),G,Num,Per) --> nombre(N,G,Num,Per), oracion_relativa(ORel,G,Num).
+%Oraciones simples
+oracion_simple(o(GV)) --> g_verbal(GV,_,_,_). %Grupo Verbal
+oracion_simple(o(GN,GV)) --> g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per). %Grupo Nominal + Grupo Verbal
 
-%Si es una oracion subordinada...
-%?Como puede ser el grupo verbal de una oracion subordinada?
-%1. verbo + grupo nominal relativo
-g_verbal_sub(gvrb(V,GRel),Num,Per) --> verbo(V,Num1,Per1),concP(Per1,Per),concNum(Num1,Num),g_nominal_rel(GRel,_,_,_).
-%2. verbo + grupo nominal + oracion subordinada sustantivada
-g_verbal_sub(gvrb(V,GN,OSub),Num,Per) --> verbo(V,Num1,Per1),concP(Per1,Per),concNum(Num1,Num),g_nominal(GN,_,_,_),oracion_subordinada_adv(OSub).
-%3. verbo + oracion subordinada adverbial
-g_verbal_sub(gvrb(V,OSub),Num,Per) --> verbo(V,Num1,Per1),concP(Per1,Per),concNum(Num1,Num),oracion_subordinada_adv(OSub).
-%4. verbo + oracion subordinada sustantivada
-g_verbal_sub(gvrb(V,OSub),Num,Per) --> verbo(V,Num1,Per1),concP(Per1,Per),concNum(Num1,Num),oracion_subordinada_sus(OSub).
+%Oraciones compuestas
+oracion_compuesta(ocm(Conj,O)) --> conjuncion(Conj), oracion_compuesta(O). %Conjuncion + Oracion Compuesta
+oracion_compuesta(ocm(O1,Conj,O2)) --> oracion_coordinada(O1,_,_), conjuncion(Conj), oracion_coordinada(O2,_,_). %Oracion Coordinada + Conjuncion + Oracion Coordinada
+oracion_compuesta(ocm(GN,GV)) --> g_nominal(GN,_,Num,Per), g_verbal_sub(GV,Num,Per). %Grupo Nominal + Grupo Verbal Subordinado
+oracion_compuesta(ocm(GN,GV)) --> g_nominal_rel(GN,G,Num,Per), g_verbal(GV,G,Num,Per). %Grupo Nominal Relativo + Grupo Verbal
+oracion_compuesta(ocm(GN,GV)) --> g_nominal_rel(GN,_,Num,Per), g_verbal_sub(GV,Num,Per). %Grupo Nominal Relativo + Grupo Verbal Subordinado
 
-%Oracion relativa (el hombre que vimos en la universidad era mi profesor)
-%                            ---------------------------
-%?Como puede ser una oracion relativa?
-%1. Pronombre (que) + grupo verbal + oracion subordinada sustantivada
-%Ej: el Word, que sirve para escribir informes, es muy util
-%             --------------------------------
-oracion_relativa(or(Con,GV,SubSus),G,Num) --> pronombre(Con,Gen1,Num1,_),g_verbal(GV,_,_,_),oracion_subordinada_sus(SubSus),concGen(G,Gen1),concNum(Num,Num1).
-%2. Pronombre (que) + grupo verbal
-oracion_relativa(or(Con,GV),G,Num) --> pronombre(Con,Gen1,Num1,_),g_verbal(GV,G,_,_),concGen(G,Gen1),concNum(Num,Num1).
+%Oraciones relativas
+oracion_relativa(or(Con,GV),G,Num) --> pronombre(Con,Gen1,Num1,_), g_verbal(GV,G,_,_), concGen(G,Gen1), concNum(Num,Num1). %Pronombre + Grupo Verbal
+oracion_relativa(or(Con,GV,SubSus),G,Num) --> pronombre(Con,Gen1,Num1,_), g_verbal(GV,_,_,_), oracion_subordinada_sustantivada(SubSus), concGen(G,Gen1), concNum(Num,Num1).  %Pronombre + Grupo Verbal + Oracion Subordinada
 
-%Oracion subordinada sustantivada (oraciones las cuales contienen un verbo
-%sustantivado).
-%Ej: El ordenador lo uso para navegar por la red
-%                        -----------------------
-%?Como puede ser una oracion subordinada sustantivada?
-%1. preposicion + verbo sustantivado (tenemos una categoria en el diccionario) + nombre
-oracion_subordinada_sus(osubsus(Prep,VS,N)) -->  preposicion(Prep), verbo_sustantivado(VS), nombre(N,_,_,_).
-%2. preposicion + verbo sustantivado
-oracion_subordinada_sus(osubsus(Prep,VS)) -->  preposicion(Prep), verbo_sustantivado(VS).
-%... Y adverbial (oraciones que comienzan por un adverbio)
-%?Como puede ser una oracion subordinada adverbial?
-%1. adverbio + grupo nominal + grupo verbal
-oracion_subordinada_adv(osubadv(Adv,GN,GV)) --> adverbio(Adv), g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per).
-%2. adverbio + grupo verbal
-oracion_subordinada_adv(osubadv(Adv,GV)) -->  adverbio(Adv), g_verbal(GV,_,_,_).
+%Oraciones subordinadas
+oracion_subordinada_sustantivada(osubsus(Prep,VS)) -->  preposicion(Prep), verbo_sustantivado(VS). %Preposicion + Verbo
+oracion_subordinada_sustantivada(osubsus(Prep,VS,N)) -->  preposicion(Prep), verbo_sustantivado(VS), nombre(N,_,_,_). %Preposicion + Verbo + Nombre
 
-%Oracion coordinada (dos o mas oraciones simples unidas por un nexo).
-%?Como puede ser una oracion coordinada?
-%1. grupo nominal + grupo verbal subordinado + nexo + otra oracion
-oracion_coord(oc(GN,GV,Conj,O),G,Num) --> g_nominal(GN,G,Num,_), g_verbal_sub(GV,_,_),conjuncion(Conj),oracion_coord(O,G,Num).
-%2. grupo nominal + grupo verbal + nexo + otra oracion
-oracion_coord(oc(GN,GV,Conj,O),G,Num) --> g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per),conjuncion(Conj),oracion_coord(O,G,Num).
-%3. grupo nominal + grupo verbal subordinado
-oracion_coord(oc(GN,GV),G,Num) --> g_nominal(GN,G,Num,_), g_verbal_sub(GV,_,_).
-%4. grupo nominal + grupo verbal
-oracion_coord(oc(GN,GV),G,Num) --> g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per).
-%5. grupo verbal subordinado
-oracion_coord(oc(GV),_,_) --> g_verbal_sub(GV,_,_).
-%6. grupo verbal
-oracion_coord(oc(GV),G,Num) --> g_verbal(GV,G,Num,_).
+oracion_subordinada_adverbial(osubadv(Adv,GV)) -->  adverbio(Adv), g_verbal(GV,_,_,_). %Adverbio + Grupo Verbal
+oracion_subordinada_adverbial(osubadv(Adv,GN,GV)) --> adverbio(Adv), g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per). %Adverbio + Grupo Nominal + Grupo Verbal
+
+%Oraciones Coordinadas
+oracion_coordinada(oc(GV),G,Num) --> g_verbal(GV,G,Num,_). %Grupo Verbal
+oracion_coordinada(oc(GV),_,_) --> g_verbal_sub(GV,_,_). %Grupo Verbal Subordinado
+oracion_coordinada(oc(GN,GV),G,Num) --> g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per). %Grupo Verbal + Gruupo Nominal
+oracion_coordinada(oc(GN,GV),G,Num) --> g_nominal(GN,G,Num,_), g_verbal_sub(GV,_,_). %Grupo Nominal + Grupo Verbal Subordionado
+oracion_coordinada(oc(GN,GV,Conj,O),G,Num) --> g_nominal(GN,G,Num,Per), g_verbal(GV,G,Num,Per), conjuncion(Conj), oracion_coordinada(O,G,Num). %Grupo Nominal + Grupo Verbal + Conjuncion + Oracion Coordinada
+oracion_coordinada(oc(GN,GV,Conj,O),G,Num) --> g_nominal(GN,G,Num,_), g_verbal_sub(GV,_,_), conjuncion(Conj), oracion_coordinada(O,G,Num). %Grupo Nominal + Grupo Verbal Subordinado + Conjuncion + Oracion Coordinada
 
 
-%G_NOMINAL
-%?Como puede ser un grupo nominal?
-%1. det + nombre + nexo + det + nombre + grupo adjetival
-%Ej: el profesor y el alumno aplicado
-g_nominal(gnom(D1,N1,Conj,D2,N2,GAdj),_,plural,Per) --> determinante(D1,Gen1,Num1),nombre(N1,Gen2,Num2,Per2), conjuncion(Conj),determinante(D2,Gen3,Num3),nombre(N2,Gen4,Num4,Per4),
-                                      concGen(Gen1, Gen2), concNum(Num1, Num2),concGen(Gen3, Gen4), concNum(Num3, Num4),
-                                      g_adjetival(GAdj, Gen5, Num5),concNum(Num5,'plural'),concGenN(Gen2,Gen4,Gen5),concPer(Per2,Per4,Per).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%       TIPOS DE GRUPOS       %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%2. det + nombre + nexo + det + nombre
-%Ej: el profesor y el alumno
-g_nominal(gnom(D1,N1,Conj,D2,N2),_,plural,Per) --> determinante(D1,Gen1,Num1),nombre(N1,Gen2,Num2,Per2), conjuncion(Conj),determinante(D2,Gen3,Num3),nombre(N2,Gen4,Num4,Per4),
-                                      concGen(Gen1, Gen2), concNum(Num1, Num2),concGen(Gen3, Gen4), concNum(Num3, Num4),concPer(Per2,Per4,Per).
+%Grupo Nominal
+g_nominal(gnom(N),G,sing,Per) --> nombre(N,G,sing,Per). %Nombre Propio
+g_nominal(gnom(N),G,Num,Per) --> nombre(N,G,Num,Per). %Nombre Comun
+g_nominal(gnom(Pron),G,Num,Per) --> pronombre(Pron,G,Num,Per). %Pronombre
+g_nominal(gnom(D,N),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per), concGen(G1,G), concNum(Num1,Num). %Determinante + Nombre
+g_nominal(gnom(N,GAdj),G,Num,Per) -->  nombre(N, G, Num,Per), g_adjetival(GAdj, G, Num). %Nombre + Grupo Adjetival
+g_nominal(gnom(N,GP),G,Num,Per) --> nombre(N, G, Num,Per), g_preposicional(GP),!. %Nombre + Preposicion
+g_nominal(gnom(D,N,GP),G,Num,Per) --> determinante(D, G, Num), nombre(N, G1, Num1,Per), g_preposicional(GP),concGen(G1,G), concNum(Num1,Num),!. %Determinante + Nombre + Preposicion
+g_nominal(gnom(D,N,GAdj),G,Num,Per) --> determinante(D, G, Num), nombre(N, G1, Num1,Per), concGen(G1,G), concNum(Num1,Num), g_adjetival(GAdj, G, Num). %Determinante + Nombre + Grupo Adjetival
+g_nominal(gnom(Pron1,Conj,Pron2),_,plural,Per) --> pronombre(Pron1,_,_,Per1), conjuncion(Conj), pronombre(Pron2,_,_,Per2), concPer(Per1,Per2,Per). %Pronombre + Conjuncion + Pronombre
+g_nominal(gnom(N1,Conj,N2),_,plural,Per) --> nombre(N1,_,_,Per1), conjuncion(Conj), nombre(N2,_,_,Per2), concPer(Per1,Per2,Per). %Nombre + Conjuncion + Nombre
+g_nominal(gnom(D,GAdj,N),G,Num,Per) --> determinante(D, G, Num), g_adjetival(GAdj, G, Num), concGen(G,G1), concNum(Num,Num1), nombre(N, G2, Num2,Per), concGen(G1,G2), concNum(Num1,Num2). %Determinante + Grupo Adjetival + Nombre
+g_nominal(gnom(D1,N1,Conj,D2,N2),_,plural,Per) --> determinante(D1,Gen1,Num1), nombre(N1,Gen2,Num2,Per2), conjuncion(Conj), determinante(D2,Gen3,Num3), nombre(N2,Gen4,Num4,Per4), concGen(Gen1, Gen2), concNum(Num1, Num2), concGen(Gen3, Gen4), concNum(Num3, Num4),concPer(Per2,Per4,Per). %Determinante + Nombre = Conjuncion + Determinante + Nombre
+g_nominal(gnom(D1,N1,Conj,D2,N2,GAdj),_,plural,Per) --> determinante(D1,Gen1,Num1), nombre(N1,Gen2,Num2,Per2), conjuncion(Conj), determinante(D2,Gen3,Num3), nombre(N2,Gen4,Num4,Per4), concGen(Gen1, Gen2), concNum(Num1, Num2), concGen(Gen3, Gen4), concNum(Num3, Num4), g_adjetival(GAdj, Gen5, Num5),concNum(Num5,'plural'),concGenN(Gen2,Gen4,Gen5),concPer(Per2,Per4,Per). %Determinante + Nombre + Conjuncion + Determinante + Nombre + Grupo Adjetival
 
-%3. nombre + nexo + nombre...
-%...4. pronombre + nexo + pronombre
-%Ej: Juan y Maria, Tu y Yo.
-g_nominal(gnom(N1,Conj,N2),_,plural,Per) --> nombre(N1,_,_,Per1), conjuncion(Conj), nombre(N2,_,_,Per2),concPer(Per1,Per2,Per).
-g_nominal(gnom(Pron1,Conj,Pron2),_,plural,Per) --> pronombre(Pron1,_,_,Per1), conjuncion(Conj), pronombre(Pron2,_,_,Per2),concPer(Per1,Per2,Per).
+%Grupo Nominal Relativo
+g_nominal_rel(gnom(N,ORel),G,Num,Per) --> nombre(N,G,Num,Per), oracion_relativa(ORel,G,Num). %Nombre + Oracion Relativa
+g_nominal_rel(gnom(D,N,ORel),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per), concGen(G1,G), concNum(Num1,Num), oracion_relativa(ORel,G,Num).  %Determinante + Nombre + Oracion Relativa
+g_nominal_rel(gnom(D,N,GP,ORel),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per), g_preposicional(GP), oracion_relativa(ORel,G,Num), concGen(G,G1), concNum(Num,Num1).  %Determinante + Nombre + Preposicion + Oracion Relativa
+g_nominal_rel(gnom(D,N,GAdj,ORel),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per),g_adjetival(GAdj,G,Num), oracion_relativa(ORel,G,Num), concGen(G,G1), concNum(Num,Num1).  %Determinante + Nombre + Adjetivo + Oracion Relativa
 
-%5. det + nombre + adj
-g_nominal(gnom(D,N,GAdj),G,Num,Per) --> determinante(D, G, Num),nombre(N, G1, Num1,Per),concGen(G1,G),concNum(Num1,Num),g_adjetival(GAdj, G, Num).
-%6. det +  adj + nombre
-g_nominal(gnom(D,GAdj,N),G,Num,Per) --> determinante(D, G, Num), g_adjetival(GAdj, G, Num), concGen(G,G1),concNum(Num,Num1), nombre(N, G2, Num2,Per), concGen(G1,G2),concNum(Num1,Num2).
-%7. det + nombre + prep
-g_nominal(gnom(D,N,GP),G,Num,Per) --> determinante(D, G, Num), nombre(N, G1, Num1,Per), g_preposicional(GP),concGen(G1,G),concNum(Num1,Num),!.
-%8. nombre + prep
-g_nominal(gnom(N,GP),G,Num,Per) --> nombre(N, G, Num,Per), g_preposicional(GP),!.
-%9. nombre + adj
-g_nominal(gnom(N,GAdj),G,Num,Per) -->  nombre(N, G, Num,Per), g_adjetival(GAdj, G, Num).
-%10. det + nombre
-g_nominal(gnom(D,N),G,Num,Per) --> determinante(D,G,Num), nombre(N, G1, Num1,Per),concGen(G1,G),concNum(Num1,Num).
-%11. pronombre
-g_nominal(gnom(Pron),G,Num,Per) --> pronombre(Pron,G,Num,Per).
-%12. nombre comun
-g_nominal(gnom(N),G,Num,Per) --> nombre(N,G,Num,Per).
-%13. nombre propio
-g_nominal(gnom(N),G,sing,Per) --> nombre(N,G,sing,Per).
+%Grupo Verbal
+g_verbal(gvrb(V),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1). %Verbo
+g_verbal(gvrb(V,GPrep),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_preposicional(GPrep). %Verbo + Grupo Preposicional
+g_verbal(gvrb(V,GAdv),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_adverbial(GAdv). %Verbo + Adverbio
+g_verbal(gvrb(V,GN,GAdj),G,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_nominal(GN,_,_,_), g_adjetival(GAdj,G,Num).  %Verbo + Grupo Nomial + Adjetivo
+g_verbal(gvrb(V,GN),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_nominal(GN,_,_,_),!. %Verbo + Grupo Nominal
+g_verbal(gvrb(V,GAdj),G,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_adjetival(GAdj,G,Num),!. %Verbo + Adjetivo
+g_verbal(gvrb(V,GAdv,GN),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_adverbial(GAdv), g_nominal(GN,_,_,_). %Verbo + Grupo Adverbial + Grupo Nominal
+g_verbal(gvrb(V,GN,GP),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1), concNum(Num,Num1), g_nominal(GN,_,_,_), g_preposicional(GP),!. %Verbo + Grupo Nominal + Grupo Preposicional
 
-%Concordancia: ?que ocurre si el sujeto tiene mas de un nucleo?
+%Grupo Verbal Subordinado
+g_verbal_sub(gvrb(V,OSub),Num,Per) --> verbo(V,Num1,Per1), concP(Per1,Per), concNum(Num1,Num), oracion_subordinada_sustantivada(OSub). %Verbo + Oracion Subordinada Sustantiva
+g_verbal_sub(gvrb(V,OSub),Num,Per) --> verbo(V,Num1,Per1), concP(Per1,Per), concNum(Num1,Num), oracion_subordinada_adverbial(OSub). %Verbo + Oracion Subordinada Adverbial
+g_verbal_sub(gvrb(V,GRel),Num,Per) --> verbo(V,Num1,Per1), concP(Per1,Per), concNum(Num1,Num), g_nominal_rel(GRel,_,_,_). %Verbo + Grupo Nominal Relativo
+g_verbal_sub(gvrb(V,GN,OSub),Num,Per) --> verbo(V,Num1,Per1), concP(Per1,Per), concNum(Num1,Num), g_nominal(GN,_,_,_), oracion_subordinada_adverbial(OSub). %Verbo + Gupo Nominal + Oracion Subordinada Adverbial
+
+%Grupo Adjetival
+g_adjetival(gAdj(Adj), Gen1, Num1) --> adjetivo(Adj, Gen, Num), concGen(Gen, Gen1), concNum(Num, Num1). %Adjetivo
+g_adjetival(gAdj(Cuant,Adj), Gen1, Num1) --> cuantificador(Cuant), adjetivo(Adj, Gen, Num), concGen(Gen, Gen1), concNum(Num, Num1). %Cuantificador + Adjetivo
+g_adjetival(gAdj(Adv,Adj), Gen1,Num1) --> g_adverbial(Adv), adjetivo(Adj, Gen, Num), concGen(Gen, Gen1), concNum(Num, Num1),!. %Adverbio + Adjetivo
+g_adjetival(gAdj(Adj,GPrep), Gen1,Num1) --> adjetivo(Adj, Gen, Num), g_preposicionalAdj(GPrep), concGen(Gen, Gen1), concNum(Num, Num1),!. %Adjetivo + Grupo Preposicional
+g_adjetival(gAdj(Cuant,Adj,GPrep),Gen1, Num1) --> cuantificador(Cuant), adjetivo(Adj, Gen, Num), g_preposicionalAdj(GPrep), concGen(Gen, Gen1), concNum(Num, Num1),!. %Cuantificador + Adjetivo + Grupo Preposicional Adjetival
+
+%Grupo Adverbial
+g_adverbial(gAdv(Adv)) --> adverbio(Adv). %Adverbio
+g_adverbial(gAdv(Adv,GP)) --> adverbio(Adv), g_preposicional(GP). %Adverbio + Preposicion
+g_adverbial(gAdv(Cuant,Adv)) --> cuantificador(Cuant), adverbio(Adv). %Cuantificador + Adverbio
+g_adverbial(gAdv(Cuant,Adv,GP)) --> cuantificador(Cuant), adverbio(Adv), g_preposicional(GP). %Cuantificador + Adverbio + Grupo Preposicional
+
+
+%Grupo Preposicional
+g_preposicional(gprep(E,T)) --> preposicion(E), g_nominal(T,_,_,_). %Preposicion + GFrupo Nominal
+g_preposicionalAdj(gprep_adj(E,T)) --> preposicionAdj(E), g_nominal(T,_,_,_). %Preposicion Adjetival + Grupo Nominal
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%       FUNCIONES DE CONCORDANCIA      %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%Concordancia: ¿que ocurre si el sujeto tiene mas de un nucleo?
 %Ej: Maria y Juan. El y sus amigas.
 %Para establecer la concordancia en cuanto al genero:
 %1. Si uno de los dos nucleos es masculino, automaticamente el genero comun
@@ -208,66 +196,15 @@ concGenN(_,'masc','fem',L,L):-false.
 concGenN('fem','fem','masc',L,L):-false.
 concGenN('fem','fem','fem',L,L):-true.
 
-%?Y en cuanto a la persona?
-%1. Si uno de los dos nucleos es 1? persona, se usara la primera en comun
+%¿Y en cuanto a la persona?
+%1. Si uno de los dos nucleos es 1º persona, se usara la primera en comun
 concPer(1,_,Per,L,L):- Per = 1.
 concPer(_,1,Per,L,L):- Per = 1.
-%2. Si uno de los dos nucleos es 2? persona, se usara la segunda en comun
+%2. Si uno de los dos nucleos es 2º persona, se usara la segunda en comun
 concPer(2,_,Per,L,L):- Per = 2.
 concPer(_,2,Per,L,L):- Per = 2.
-%3. Si uno de los dos nucleos es 3? persona, se usara la tercera en comun
+%3. Si uno de los dos nucleos es 3º persona, se usara la tercera en comun
 concPer(3,3,Per,L,L):- Per = 3.
-
-%G_VERBAL
-%?Como puede ser un grupo verbal?
-%1. verbo + grupo nominal + prep
-g_verbal(gvrb(V,GN,GP),_,Num,Per) --> verbo(V,Num1,Per1),concP(Per,Per1),concNum(Num,Num1), g_nominal(GN,_,_,_),g_preposicional(GP),!.
-%2. verbo + adv + grupo nominal
-g_verbal(gvrb(V,GAdv,GN),_,Num,Per) --> verbo(V,Num1,Per1),concP(Per,Per1),concNum(Num,Num1), g_adverbial(GAdv),g_nominal(GN,_,_,_).
-%3. verbo + grupo nominal
-g_verbal(gvrb(V,GN),_,Num,Per) --> verbo(V,Num1,Per1),concP(Per,Per1),concNum(Num,Num1),g_nominal(GN,_,_,_),!.
-%4. verbo + grupo nominal + adj
-g_verbal(gvrb(V,GN,GAdj),G,Num,Per) --> verbo(V,Num1,Per1),concP(Per,Per1),concNum(Num,Num1),g_nominal(GN,_,_,_), g_adjetival(GAdj,G,Num).
-%5. verbo + adj
-g_verbal(gvrb(V,GAdj),G,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1),concNum(Num,Num1),g_adjetival(GAdj,G,Num),!.
-%6. verbo + adv
-g_verbal(gvrb(V,GAdv),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1),concNum(Num,Num1),g_adverbial(GAdv).
-%7. verbo + prep
-g_verbal(gvrb(V,GPrep),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1),concNum(Num,Num1), g_preposicional(GPrep).
-%8. verbo
-g_verbal(gvrb(V),_,Num,Per) --> verbo(V,Num1,Per1), concP(Per,Per1),concNum(Num,Num1).
-
-%G_ADJETIVAL
-%?Como puede ser un grupo adjetival?
-%1. cuantificador (muy --> adverbio en realidad) + adj + prepAdj (grupo preposicional especifico para los adjetivos)
-g_adjetival(gAdj(Cuant,Adj,GPrep),Gen1, Num1) --> cuantificador(Cuant), adjetivo(Adj, Gen, Num),g_preposicionalAdj(GPrep),concGen(Gen, Gen1), concNum(Num, Num1),!.
-%2. adj + prepAdj
-g_adjetival(gAdj(Adj,GPrep), Gen1,Num1) --> adjetivo(Adj, Gen, Num),g_preposicionalAdj(GPrep),concGen(Gen, Gen1),concNum(Num, Num1),!.
-%3. adv + adj
-g_adjetival(gAdj(Adv,Adj), Gen1,Num1) --> g_adverbial(Adv), adjetivo(Adj, Gen, Num),concGen(Gen, Gen1),concNum(Num, Num1),!.
-%4. adj
-g_adjetival(gAdj(Adj), Gen1, Num1) --> adjetivo(Adj, Gen, Num), concGen(Gen, Gen1), concNum(Num, Num1).
-%5. cuantificador + adj
-g_adjetival(gAdj(Cuant,Adj), Gen1, Num1) --> cuantificador(Cuant),adjetivo(Adj, Gen, Num), concGen(Gen, Gen1), concNum(Num, Num1).
-
-%G_ADVERBIAL
-%?Como puede ser un grupo adverbial?
-%1. cuantificador + adverbio + prep
-g_adverbial(gAdv(Cuant,Adv,GP)) --> cuantificador(Cuant),adverbio(Adv),g_preposicional(GP).
-%2. cuantificador + adv
-g_adverbial(gAdv(Cuant,Adv)) --> cuantificador(Cuant),adverbio(Adv).
-%3. adv + prep
-g_adverbial(gAdv(Adv,GP)) --> adverbio(Adv), g_preposicional(GP).
-%4. adv
-g_adverbial(gAdv(Adv)) --> adverbio(Adv).
-
-%G_PREPOSICIONAL
-%?Como puede ser un grupo preposicional?
-%E = Enlace, T = T?rmino
-%1. prepAdj + grupo nominal
-g_preposicionalAdj(gprep_adj(E,T)) --> preposicionAdj(E), g_nominal(T,_,_,_).
-%2. prep + grupo nominal
-g_preposicional(gprep(E,T)) --> preposicion(E), g_nominal(T,_,_,_).
 
 %Concordancia
 %Si alguna de los generos/numeros/personas no coincide, mostramos un mensaje.
