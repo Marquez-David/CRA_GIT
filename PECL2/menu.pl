@@ -28,7 +28,7 @@ analizar:-
 aux(Opcion,FRASES):-
   Opcion = 1, menu(FRASES);
   Opcion = 2, menu2;
-  Opcion = 3, simplificar(['Juan',es,moreno,y,'María',es,alta,y,'Juan',es,ágil],[]);
+  Opcion = 3, writeln('Introduce la oracion a simplificar'), read(X), simplificar(X,[]);
   writeln('Debes selecciona runa de las tres opciones'), analizar.
 
 menu([]):- writeln('Las frases han acabado').

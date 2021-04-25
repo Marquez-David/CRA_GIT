@@ -64,6 +64,7 @@ oracion_simple(o(GV)) --> g_verbal(GV,_,_,_). %Grupo Verbal
 
 %Oraciones compuestas
 oracion_compuesta(ocm(Conj,O)) --> conjuncion(Conj), oracion_compuesta(O). %Conjuncion + Oracion Compuesta
+oracion_compuesta(ocm(O1,Conj,O2,O3)) --> oracion_coordinada(O1,_,_), conjuncion(Conj), oracion_coordinada(O2,_,_), oracion_compuesta(O3). %Oracion Coordinada + Conjuncion + Oracion Coordinada
 oracion_compuesta(ocm(O1,Conj,O2)) --> oracion_coordinada(O1,_,_), conjuncion(Conj), oracion_coordinada(O2,_,_). %Oracion Coordinada + Conjuncion + Oracion Coordinada
 oracion_compuesta(ocm(GN,GV)) --> g_nominal(GN,_,Numero,Persona), g_verbal_sub(GV,Numero,Persona). %Grupo Nominal + Grupo Verbal Subordinado
 oracion_compuesta(ocm(GN,GV)) --> g_nominal_rel(GN,Genero,Numero,Persona), g_verbal(GV,Genero,Numero,Persona). %Grupo Nominal Relativo + Grupo Verbal
@@ -95,50 +96,50 @@ oracion_coordinada(oc(GV),Genero,Numero) --> g_verbal(GV,Genero,Numero,_). %Grup
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %Grupo Nominal
-g_nominal(gnom(D1,N1,Conj,D2,N2,GAdj),_,plural,Persona) --> determinante(D1,Genero,Numero), nombre(N1,Genero,Numero,Persona), conjuncion(Conj), determinante(D2,Genero,Numero), nombre(N2,Genero,Numero,Persona), g_adjetival(GAdj,Genero,Numero).
-g_nominal(gnom(D1,N1,Conj,D2,N2),_,plural,Persona) --> determinante(D1,Genero,Numero), nombre(N1,Genero,Numero,Persona), conjuncion(Conj), determinante(D2,Genero,Numero), nombre(N2,Genero,Numero,Persona).
-g_nominal(gnom(D,GAdj,N),Genero,Numero,Persona) --> determinante(D, Genero, Numero), g_adjetival(GAdj, Genero, Numero), nombre(N, Genero, Numero,Persona).
-g_nominal(gnom(N1,Conj,N2),_,plural,Persona) --> nombre(N1,_,_,Persona), conjuncion(Conj), nombre(N2,_,_,Persona).
-g_nominal(gnom(Pron1,Conj,Pron2),_,plural,Persona) --> pronombre(Pron1,_,_,Persona), conjuncion(Conj), pronombre(Pron2,_,_,Persona).
-g_nominal(gnom(D,N,GAdj),Genero,Numero,Persona) --> determinante(D, Genero, Numero), nombre(N, Genero, Numero,Persona), g_adjetival(GAdj, Genero, Numero).
-g_nominal(gnom(D,N,GP),Genero,Numero,Persona) --> determinante(D, Genero, Numero), nombre(N, Genero, Numero,Persona), g_preposicional(GP),!.
-g_nominal(gnom(N,GP),Genero,Numero,Persona) --> nombre(N, Genero, Numero,Persona), g_preposicional(GP),!.
-g_nominal(gnom(N,GAdj),Genero,Numero,Persona) -->  nombre(N, Genero, Numero,Persona), g_adjetival(GAdj,Genero,Numero).
-g_nominal(gnom(D,N),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero,Numero,Persona).
-g_nominal(gnom(Pron),Genero,Numero,Persona) --> pronombre(Pron,Genero,Numero,Persona).
-g_nominal(gnom(N),Genero,Numero,Persona) --> nombre(N,Genero,Numero,Persona).
-g_nominal(gnom(N),Genero,sinGenero,Persona) --> nombre(N,Genero,sinGenero,Persona).
+g_nominal(gnom(D1,N1,Conj,D2,N2,GAdj),_,plural,Persona) --> determinante(D1,Genero,Numero), nombre(N1,Genero,Numero,Persona), conjuncion(Conj), determinante(D2,Genero,Numero), nombre(N2,Genero,Numero,Persona), g_adjetival(GAdj,Genero,Numero). %Determinante + Nombre + Conjuncion + Determinante + Nombre + Grupo Adjetival
+g_nominal(gnom(D1,N1,Conj,D2,N2),_,plural,Persona) --> determinante(D1,Genero,Numero), nombre(N1,Genero,Numero,Persona), conjuncion(Conj), determinante(D2,Genero,Numero), nombre(N2,Genero,Numero,Persona). %Determinante + Nombre + Conjuncion + Determinante + Nombre
+g_nominal(gnom(D,GAdj,N),Genero,Numero,Persona) --> determinante(D, Genero, Numero), g_adjetival(GAdj, Genero, Numero), nombre(N, Genero, Numero,Persona). %Determinante + Grupo Adjetival + Nombre
+g_nominal(gnom(N1,Conj,N2),_,plural,Persona) --> nombre(N1,_,_,Persona), conjuncion(Conj), nombre(N2,_,_,Persona). %Nombre + Conjuncion + Nombre
+g_nominal(gnom(Pron1,Conj,Pron2),_,plural,Persona) --> pronombre(Pron1,_,_,Persona), conjuncion(Conj), pronombre(Pron2,_,_,Persona). %Pronombre + Conjuncion + Pronombre
+g_nominal(gnom(D,N,GAdj),Genero,Numero,Persona) --> determinante(D, Genero, Numero), nombre(N, Genero, Numero,Persona), g_adjetival(GAdj, Genero, Numero). %Determinante + Nombre + Grupo Adjetival
+g_nominal(gnom(D,N,GP),Genero,Numero,Persona) --> determinante(D, Genero, Numero), nombre(N, Genero, Numero,Persona), g_preposicional(GP),!. %Determinate + Nombre + Grupo Preposicional
+g_nominal(gnom(N,GP),Genero,Numero,Persona) --> nombre(N, Genero, Numero,Persona), g_preposicional(GP),!. %Nombre + Grupo Preposicional
+g_nominal(gnom(N,GAdj),Genero,Numero,Persona) -->  nombre(N, Genero, Numero,Persona), g_adjetival(GAdj,Genero,Numero). %Nombre + Grupo Adjetival
+g_nominal(gnom(D,N),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero,Numero,Persona). %Determinante + Nombre
+g_nominal(gnom(Pron),Genero,Numero,Persona) --> pronombre(Pron,Genero,Numero,Persona). %Pronombre
+g_nominal(gnom(N),Genero,Numero,Persona) --> nombre(N,Genero,Numero,Persona). %Nombre comun
+g_nominal(gnom(N),Genero,sinGenero,Persona) --> nombre(N,Genero,sinGenero,Persona). %Nombre  propio
 
 %Grupo Nominal Relativo
-g_nominal_rel(gnom(D,N,GAdj,ORel),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero, Numero,Persona),g_adjetival(GAdj,Genero,Numero), oracion_relativa(ORel,Genero,Numero).
-g_nominal_rel(gnom(D,N,GP,ORel),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero,Numero,Persona), g_preposicional(GP), oracion_relativa(ORel,Genero,Numero).
-g_nominal_rel(gnom(D,N,ORel),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero,Numero,Persona), oracion_relativa(ORel,Genero,Numero).
-g_nominal_rel(gnom(N,ORel),Genero,Numero,Persona) --> nombre(N,Genero,Numero,Persona), oracion_relativa(ORel,Genero,Numero).
+g_nominal_rel(gnom(D,N,GAdj,ORel),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero, Numero,Persona), g_adjetival(GAdj,Genero,Numero), oracion_relativa(ORel,Genero,Numero). %Determinante + Nombre + Grupo Adjetival + Oracion relativa
+g_nominal_rel(gnom(D,N,GP,ORel),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero,Numero,Persona), g_preposicional(GP), oracion_relativa(ORel,Genero,Numero). %Determinante + Nombre + Grupo Preposicional + Oracion relativa
+g_nominal_rel(gnom(D,N,ORel),Genero,Numero,Persona) --> determinante(D,Genero,Numero), nombre(N,Genero,Numero,Persona), oracion_relativa(ORel,Genero,Numero). %Determinante + Nombre + Oracion Relativa
+g_nominal_rel(gnom(N,ORel),Genero,Numero,Persona) --> nombre(N,Genero,Numero,Persona), oracion_relativa(ORel,Genero,Numero). %Nombre + Oracion Relativa
 
 %Grupo Verbal
-g_verbal(gvrb(V,GAdv,GAdj,GP),Genero,Numero,Persona) --> verbo(V,Numero,Persona), g_adverbial(GAdv), g_adjetival(GAdj,Genero,Numero), g_preposicional(GP),!.
-g_verbal(gvrb(V,GN,GP),_,Numero,Persona) --> verbo(V,Numero,Persona), g_nominal(GN,_,_,_), g_preposicional(GP),!.
-g_verbal(gvrb(V,GAdv,GN),_,Numero,Persona) --> verbo(V,Numero,Persona), g_adverbial(GAdv), g_nominal(GN,_,_,_).
-g_verbal(gvrb(V,GAdj),Genero,Numero,Persona) --> verbo(V,Numero,Persona), g_adjetival(GAdj,Genero,Numero),!.
-g_verbal(gvrb(V,GN),_,Numero,Persona) --> verbo(V,Numero,Persona), g_nominal(GN,_,_,_).
-g_verbal(gvrb(V,GN,GAdj),Genero,Numero,Persona) --> verbo(V,Numero,Persona),  g_nominal(GN,_,_,_), g_adjetival(GAdj,Genero,Numero).
-g_verbal(gvrb(V,GAdv),_,Numero,Persona) --> verbo(V,Numero,Persona), g_adverbial(GAdv).
-g_verbal(gvrb(V,GPrep),_,Numero,Persona) --> verbo(V,Numero,Persona), g_preposicional(GPrep).
-g_verbal(gvrb(V),_,Numero,Persona) --> verbo(V,Numero,Persona).
+g_verbal(gvrb(V,GAdv,GAdj,GP),Genero,Numero,Persona) --> verbo(V,Numero,Persona), g_adverbial(GAdv), g_adjetival(GAdj,Genero,Numero), g_preposicional(GP),!.  %Verbo + Grupo Adverbial + Grupo Adjetival + Grupo Preposicional
+g_verbal(gvrb(V,GN,GP),_,Numero,Persona) --> verbo(V,Numero,Persona), g_nominal(GN,_,_,_), g_preposicional(GP),!.  %Verbo + Grupo Nominal + Grupo Preposicional
+g_verbal(gvrb(V,GAdv,GN),_,Numero,Persona) --> verbo(V,Numero,Persona), g_adverbial(GAdv), g_nominal(GN,_,_,_). %Verbo + Grupo Adverbial + Grupo Nominal
+g_verbal(gvrb(V,GAdj),Genero,Numero,Persona) --> verbo(V,Numero,Persona), g_adjetival(GAdj,Genero,Numero),!. %Verbo + Grupo Adjetival
+g_verbal(gvrb(V,GN),_,Numero,Persona) --> verbo(V,Numero,Persona), g_nominal(GN,_,_,_). %Verbo + Grupo Nominal
+g_verbal(gvrb(V,GN,GAdj),Genero,Numero,Persona) --> verbo(V,Numero,Persona),  g_nominal(GN,_,_,_), g_adjetival(GAdj,Genero,Numero). %Verbo + Grupo Nominal + Grupo Adjetival
+g_verbal(gvrb(V,GAdv),_,Numero,Persona) --> verbo(V,Numero,Persona), g_adverbial(GAdv). %Verbo + Grupo Adverbial
+g_verbal(gvrb(V,GPrep),_,Numero,Persona) --> verbo(V,Numero,Persona), g_preposicional(GPrep). %Verbo + Grupo Preposicional
+g_verbal(gvrb(V),_,Numero,Persona) --> verbo(V,Numero,Persona). %Verbo
 
 %Grupo Verbal Subordinado
-g_verbal_sub(gvrb(V,GN,OSub),Numero,Persona) --> verbo(V,Numero,Persona), g_nominal(GN,_,_,_), oracion_subordinada_adverbial(OSub).
-g_verbal_sub(gvrb(V,OSub),Numero,Persona) --> verbo(V,Numero,Persona), oracion_subordinada_sustantivada(OSub).
-g_verbal_sub(gvrb(V,OSub),Numero,Persona) --> verbo(V,Numero,Persona), oracion_subordinada_adverbial(OSub).
-g_verbal_sub(gvrb(V,GRel),Numero,Persona) --> verbo(V,Numero,Persona), g_nominal_rel(GRel,_,_,_).
+g_verbal_sub(gvrb(V,GN,OSub),Numero,Persona) --> verbo(V,Numero,Persona), g_nominal(GN,_,_,_), oracion_subordinada_adverbial(OSub). %Verbo + Grupo Nominal + Oracion Subordinada Adverbial
+g_verbal_sub(gvrb(V,OSub),Numero,Persona) --> verbo(V,Numero,Persona), oracion_subordinada_sustantivada(OSub). %Verbo + Oracion Subordinada Sustantiva
+g_verbal_sub(gvrb(V,OSub),Numero,Persona) --> verbo(V,Numero,Persona), oracion_subordinada_adverbial(OSub). %Verbo + Oracion Subordinada Advebial
+g_verbal_sub(gvrb(V,GRel),Numero,Persona) --> verbo(V,Numero,Persona), g_nominal_rel(GRel,_,_,_).  %Verbo + Grupo Nominal Relativo
 
 
 %Grupo Adjetival
 g_adjetival(gAdj(Cuant,Adj,GPrep),Genero, Numero) --> cuantificador(Cuant), adjetivo(Adj,Genero,Numero), g_preposicionalAdj(GPrep),!. %Cuantificador + Adjetivo + Grupo Preposicional Adjetival
-g_adjetival(gAdj(Adj,GPrep), Genero,Numero) --> adjetivo(Adj,Genero, Numero), g_preposicionalAdj(GPrep),!.
-g_adjetival(gAdj(Adv,Adj), Genero,Numero) --> g_adverbial(Adv), adjetivo(Adj, Genero, Numero),!.
-g_adjetival(gAdj(Cuant,Adj), Genero, Numero) --> cuantificador(Cuant), adjetivo(Adj, Genero, Numero).
-g_adjetival(gAdj(Adj), Genero, Numero) --> adjetivo(Adj,Genero,Numero).
+g_adjetival(gAdj(Adj,GPrep), Genero,Numero) --> adjetivo(Adj,Genero, Numero), g_preposicionalAdj(GPrep),!. %Adjetivo + Grupo Preposicional
+g_adjetival(gAdj(Adv,Adj), Genero,Numero) --> g_adverbial(Adv), adjetivo(Adj, Genero, Numero),!. %Grupo Adverbial + Adjetivo
+g_adjetival(gAdj(Cuant,Adj), Genero, Numero) --> cuantificador(Cuant), adjetivo(Adj, Genero, Numero). %Cuantificador + Adjetivo
+g_adjetival(gAdj(Adj), Genero, Numero) --> adjetivo(Adj,Genero,Numero). %Adjetivo
 
 %Grupo Adverbial
 g_adverbial(gAdv(Cuant,Adv,GP)) --> cuantificador(Cuant), adverbio(Adv), g_preposicional(GP). %Cuantificador + Adverbio + Grupo Preposicional
