@@ -5,8 +5,9 @@
 :-consult(draw).
 
 analizar:-
-  FRASES = [['Juan',es,moreno,y,'María',es,alta],
-  ['Juan',estudia,'Filosofía',pero,'María',estudia,'Derecho'],
+  FRASES = [
+  ['Juan',es,moreno,y,'María',es,alta],
+  ['Juan',estudia,filosofía,pero,'María',estudia,derecho],
   ['María',toma,un,café,mientras,'Juan',recoge,la,mesa],
   ['Juan',toma,café,y,lee,el,periódico],
   ['Juan',y,'Héctor',comen,patatas,fritas,y,beben,cerveza],
@@ -19,20 +20,30 @@ analizar:-
   [el,procesador,de,textos,es,una,herramienta,muy,potente,que,sirve,para,escribir,documentos,pero,es,bastante,lento],
   [el,ratón,que,cazó,el,gato,era,gris],
   [el,hombre,que,vimos,ayer,era,mi,vecino]],
-  menu(FRASES).
+  writeln('Pulsa 1. si desea analizar las oraciones predeterminadas'),
+  writeln('Pulsa 2. si desea analizar su propia oracion'),
+  writeln('Pulsa 3. si desea simplificar una oracion'),
+  read(X), aux(X,FRASES).
+  
+aux(Opcion,FRASES):-
+  Opcion = 1, menu(FRASES);
+  Opcion = 2, menu2;
+  Opcion = 3, simplificar(['Juan',es,moreno,y,'María',es,alta,y,'Juan',es,ágil],[]);
+  writeln('Debes selecciona runa de las tres opciones'), analizar.
 
 menu([]):- writeln('Las frases han acabado').
 menu([H|T]):-
+  write('Escribe 1. para analizar la siguiente frase'), nl,
   write('Escribe 0. para salir del analizador'), nl,
   read(X),
   X \= 0 -> preprocesamiento(H), menu(T);
   writeln('Adios!').
   
-analizar2:-
+menu2:-
   write('Escribe la frase que desee analizar'), nl,
   write('Escribe 0. para salir del analizador'), nl,
   read(X),
-  X \= 0 -> preprocesamiento(X), analizar2;
+  X \= 0 -> preprocesamiento(X), menu2;
   writeln('Adios!').
 
   
