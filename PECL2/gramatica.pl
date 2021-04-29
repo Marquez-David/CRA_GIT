@@ -1,4 +1,4 @@
-% Autores: David M?rquez M?nguez y Robert Petrisor
+% Autores: David Márquez Mínguez y Robert Petrisor
 % Fecha: 27/04/2021
 
 :-['diccionario.pl'].

@@ -37,7 +37,7 @@ aux(Opcion,FRASES):-
   Opcion = 1, menu(FRASES);
   Opcion = 2, menu2;
   Opcion = 3, writeln('Introduce la oracion a simplificar(ej, [el,hombre,es,guapo,y,el,es,moreno].): '), read(X), simplificar(X,[]);
-  writeln('Debes selecciona runa de las tres opciones'), analizar.
+  writeln('Debes seleccionar una de las tres opciones'), analizar.
 
 menu([]):- writeln('Las frases han acabado').
 menu([H|T]):-

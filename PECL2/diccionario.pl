@@ -1,4 +1,4 @@
-% Autores: David M?rquez M?nguez y Robert Petrisor
+% Autores: David Márquez Mínguez y Robert Petrisor
 % Fecha: 27/04/2021
 
 %Verbos
@@ -54,7 +54,7 @@ n(filosofía,femenino,singular,3).
 n(derecho,masculino,singular,3).
 
 %Nombre propio
-nombrePropio(np(X),Gen,Per) --> [X], {np(X,Gen,Per)}.
+nombrePropio(np(X),Genero,Persona) --> [X], {np(X,Genero,Persona)}.
 np('Héctor',masculino,3).
 np('Irene',femenino,3).
 np('Juan',masculino,3).
@@ -118,6 +118,7 @@ p(para).
 p(por).
 p(con).
 
+%Conjuncion
 conjuncion(c(X)) --> [X], {c(X)}.
 c(y).
 c(e).
