@@ -133,7 +133,6 @@ g_verbal_sub(gvrb(V,OSub),Numero,Persona) --> verbo(V,Numero,Persona), oracion_s
 g_verbal_sub(gvrb(V,OSub),Numero,Persona) --> verbo(V,Numero,Persona), oracion_subordinada_adverbial(OSub). %Verbo + Oracion Subordinada Advebial
 g_verbal_sub(gvrb(V,GRel),Numero,Persona) --> verbo(V,Numero,Persona), g_nominal_rel(GRel,_,_,_).  %Verbo + Grupo Nominal Relativo
 
-
 %Grupo Adjetival
 g_adjetival(gAdj(Cuant,Adj,GPrep),Genero, Numero) --> cuantificador(Cuant), adjetivo(Adj,Genero,Numero), g_preposicionalAdj(GPrep),!. %Cuantificador + Adjetivo + Grupo Preposicional Adjetival
 g_adjetival(gAdj(Adj,GPrep), Genero,Numero) --> adjetivo(Adj,Genero, Numero), g_preposicionalAdj(GPrep),!. %Adjetivo + Grupo Preposicional
